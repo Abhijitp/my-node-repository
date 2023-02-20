@@ -3,8 +3,8 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 
-const express = require('express');
-const mongoose = require('mongoose');
+import express  from 'express';
+import mongoose from 'mongoose';
 /*const path = require('path');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
