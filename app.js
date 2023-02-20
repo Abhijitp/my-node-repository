@@ -4,8 +4,8 @@ if (process.env.NODE_ENV !== "production") {
 
 
 const express = require('express');
-const path = require('path');
 const mongoose = require('mongoose');
+/*const path = require('path');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -21,7 +21,10 @@ const MongoDBStore = require("connect-mongo")(session);
 
 //const userRoutes = require('./routes/users');
 //const campgroundRoutes = require('./routes/campgrounds');
-//const reviewRoutes = require('./routes/reviews');
+//const reviewRoutes = require('./routes/reviews');*/
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
 //'mongodb://localhost:27017/yelp-camp'
 mongoose.connect(dbUrl, {
@@ -37,13 +40,12 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
-const app = express();
 
 //app.engine('ejs', ejsMate)
 //app.set('view engine', 'ejs');
 //app.set('views', path.join(__dirname, 'views'))
 
-app.use(express.urlencoded({ extended: true }));
+/*app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize({
@@ -114,6 +116,11 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     res.status(statusCode).render('error', { err })
 })
+*/
+
+app.get('/', (req, res) => {
+    res.json('home')
+});
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Serving on port 3000')
