@@ -19,9 +19,9 @@ const mongoSanitize = require('express-mongo-sanitize');
 const MongoDBStore = require("connect-mongo")(session);
 
 
-const userRoutes = require('./routes/users');
-const campgroundRoutes = require('./routes/campgrounds');
-const reviewRoutes = require('./routes/reviews');
+//const userRoutes = require('./routes/users');
+//const campgroundRoutes = require('./routes/campgrounds');
+//const reviewRoutes = require('./routes/reviews');
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
 //'mongodb://localhost:27017/yelp-camp'
 mongoose.connect(dbUrl, {
@@ -39,9 +39,9 @@ db.once("open", () => {
 
 const app = express();
 
-app.engine('ejs', ejsMate)
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'))
+//app.engine('ejs', ejsMate)
+//app.set('view engine', 'ejs');
+//app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
@@ -95,13 +95,13 @@ app.use((req, res, next) => {
 })
 
 
-app.use('/', userRoutes);
-app.use('/campgrounds', campgroundRoutes)
-app.use('/campgrounds/:id/reviews', reviewRoutes)
+//app.use('/', userRoutes);
+//app.use('/campgrounds', campgroundRoutes)
+//app.use('/campgrounds/:id/reviews', reviewRoutes)
 
 
 app.get('/', (req, res) => {
-    res.render('home')
+    res.json('home')
 });
 
 
@@ -115,7 +115,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err })
 })
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log('Serving on port 3000')
 })
 
