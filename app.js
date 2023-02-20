@@ -1,6 +1,10 @@
-import express  from 'express';
-import mongoose from 'mongoose';
-/*const path = require('path');
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
+const express = require('express');
+const path = require('path');
+const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -9,19 +13,16 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
-
+const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
+const userRoutes = require('./routes/users');
+const campgroundRoutes = require('./routes/campgrounds');
+const reviewRoutes = require('./routes/reviews');
+
 const MongoDBStore = require("connect-mongo")(session);
 
-
-//const userRoutes = require('./routes/users');
-//const campgroundRoutes = require('./routes/campgrounds');
-//const reviewRoutes = require('./routes/reviews');*/
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
-//'mongodb://localhost:27017/yelp-camp'
+
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -35,18 +36,18 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
+const app = express();
 
-//app.engine('ejs', ejsMate)
-//app.set('view engine', 'ejs');
-//app.set('views', path.join(__dirname, 'views'))
+app.engine('ejs', ejsMate)
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
 
-/*app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize({
     replaceWith: '_'
 }))
-
 const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 
 const store = new MongoDBStore({
@@ -92,13 +93,13 @@ app.use((req, res, next) => {
 })
 
 
-//app.use('/', userRoutes);
-//app.use('/campgrounds', campgroundRoutes)
-//app.use('/campgrounds/:id/reviews', reviewRoutes)
+app.use('/', userRoutes);
+app.use('/campgrounds', campgroundRoutes)
+app.use('/campgrounds/:id/reviews', reviewRoutes)
 
 
 app.get('/', (req, res) => {
-    res.json('home')
+    res.render('home')
 });
 
 
@@ -111,14 +112,8 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     res.status(statusCode).render('error', { err })
 })
-*/
 
-app.get('/', (req, res) => {
-    res.json('home')
-});
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log('Serving on port 3000')
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Serving on port ${port}`)
 })
-
-
